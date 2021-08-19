@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% block content %}
+<script src="~/scripts/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+
+  var cache=null;
+  $(
+      function(){
+        
+          $( "#watchlist_form" ).autocomplete(
+          {
+            max:10,
+          source:function(request,response){
+            console.log('sd');
+              if(cache==null){
+                  $.getJSON("{% url 'autocomplete' %}",function(data){
+                      cache=data;
+                      console.log(data);
+                  });
+                  var results = $.ui.autocomplete.filter(cache, request.term);
+                  response(results.slice(0, 10));
+
+              }
+              else{
+                  
+                  var results = $.ui.autocomplete.filter(cache, request.term);
+                  response(results.slice(0, 10));
+
+              }
+
+          }
+          });
+      }
+  );
+  
+  </script>
+
+  
+
+
+<!-- #region datatables files -->
+
+<style>
+ 
+   
+.ui-autocomplete {height: 200px; width:250px;overflow-y: scroll; overflow-x: hidden;}
+
+
+
+</style>
+
+<form  action="{% url 'add_stock' user %}" class="d-flex" method="POST">
+    {% csrf_token %}
+    <input  id='watchlist_form' class="form- control me-2" type="search" placeholder="Add to stock" aria-label="Search" name='ticker'>
+    <input type="hidden" name="user" value="{{user}}" />
+    <button class="btn btn-outline-success" type="submit">Add</button>
+  </form>
+  <br>
+  <br><br>
+
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+  
+   
+ <style>
+            .dataTables_length,
+        .dataTables_wrapper {
+          font-size: 1rem;
+        }
+        .dataTables_length select,
+        .dataTables_length input,
+        .dataTables_wrapper select,
+        .dataTables_wrapper input {
+          background-color: #f9f9f9;
+          border: 1px solid #999;
+          border-radius: 4px;
+          height: 2rem;
+          line-height: 2;
+          font-size: 1rem;
+          color: #333;
+        }
+        .dataTables_length .dataTables_length,
+        .dataTables_length .dataTables_filter,
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter {
+          margin-top: 30px;
+          margin-right: 20px;
+          margin-bottom: 10px;
+          display: inline-flex;
+        }
+
+        .paginate_button {
+          min-width: 4rem;
+          display: inline-block;
+          text-align: center;
+          padding: 1rem 1rem;
+          margin-top: -1rem;
+          border: 2px solid lightblue;
+        }
+        .paginate_button:not(.previous) {
+          border-left: none;
+        }
+        .paginate_button.previous {
+          border-radius: 8px 0 0 8px;
+          min-width: 7rem;
+        }
+        .paginate_button.next {
+          border-radius: 0 8px 8px 0;
+          min-width: 2rem;
+        }
+        .paginate_button:hover {
+          cursor: pointer;
+          background-color: #eee;
+          text-decoration: none;
+        }
+  </style>
+
+  <script>
+    $(document).ready(function() {
+      $("#watchlist").DataTable();
+});
+
+  </script>
+
+  <table id='watchlist' class="table  table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">CompanyName</th>
+        <th scope="col">Price</th>
+        <th scope="col">marketCap</th>
+        <th scope="col">week52High</th>
+        <th scope="col">week52High</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+
+  
+
+    <tbody>
+
+      {% for item,x in output %}
+      <tr>
+        <th scope="row"><a href="{%url 'home_ticker' item.symbol %}">{{item.companyName}}</a></th>
+        <td>{{item.latestPrice}}</td>
+        <td>{{item.marketCap}}</td>
+        <td>{{item.week52High}}</td>
+        <td>{{item.week52Low}}</td>
+        <td><a style='text-decoration: none;'href="{% url 'delete' x.id user %}">
+          <button type='button' class="btn btn-danger btn-sm">Delete</button>
+        </td>
+      </tr>
+      {% endfor%}
+    
+    </tbody>
+   
+  </table>
+
+
+{% endblock %}

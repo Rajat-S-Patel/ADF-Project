@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% if api %}
+    {% if api == "Error..." %}
+        There was a problem with your ticker symbol
+    {% else %}
+
+    <div class="card bg-dark mb-3" style="color:white;width: 18rem;">
+        <div class="card-body">
+          <h3 class="card-title">{{api.companyName}}</h3>
+          <p class="card-text">
+              <table>
+                  <tr>
+                    <td><b>Price</b>:</td>
+                    <td>{{api.latestPrice}}</td>
+                 </tr>
+                 <tr>
+                    <td><b>marketCap</b>:</td>
+                    <td>{{api.marketCap}}</td>
+                 </tr>
+                 <tr>
+                    <td><b>week52High</b>:</td>
+                    <td>{{api.week52High}}</td>
+                 </tr>
+                 <tr>
+                    <td><b>week52Low</b>:</td>
+                    <td>{{api.week52Low}}</td>
+                 </tr>
+              </table>
+          </p>
+          <a href="{% url 'fullStockDetail' ticker %}" class="btn btn-primary btn-g">Show all</a>
+        </div>
+    </div>
+    {% endif %}
+
+{%else%}
+    There was a problem with your ticker symbol
+{% endif %}
+
+{% if ticker != "Error..." %}
+{{ ticker|json_script:'name' }}
+
+<!-- <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script> -->
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
+<script>
+
+    
+window.onload = function () {
+  var dataPoints = [];
+  var stockChart = new CanvasJS.StockChart("stockChartContainer",{
+    theme: "light2",
+    colorSet: "colorSet1",
+    exportEnabled: true, //false
+    title:{
+      text:"Stock History"
+    },
+    subtitles: [{
+      text: "Closing price of stocks"
+    }],
+    charts: [{
+      axisX: {
+        crosshair: {
+          enabled: true
+        }
+      },
+      axisY: {
+        prefix: "$",
+        suffix: "",
+        title: "Previous close",
+        titleFontSize: 14
+      },
+      data: [{
+        type: "area",
+        xValueFormatString: "MMM YYYY",
+        yValueFormatString: "$#,###.##M",
+        dataPoints : dataPoints
+      }]
+    }],
+    navigator: {
+      slider: {
+        minimum: new Date(2021, 00, 01),
+        maximum: new Date(2021, 00, 04)
+      }
+    }
+  });
+
+  var ticker= JSON.parse(document.getElementById('name').textContent);
+  console.log(ticker);
+
+  $.getJSON("https://cloud.iexapis.com/stable/stock/"+ticker+"/batch?types=chart&range=1m&last=100&token=pk_c34e4387edb548f793eb253819c594f0", function(data) {
+    data=data['chart']
+    
+    for(var i = 0; i < data.length; i++){
+      dataPoints.push({x: new Date(data[i].date), y: Number(data[i].open)});
+    }
+    stockChart.render();
+  });
+}
+
+</script>
+
+</br>
+</br>
+
+<div id="stockChartContainer" style="color:green; height:400px; width: 100%;"></div>
+<div style="margin-top:16px;color:dimgrey;font-size:9px;font-family: Verdana, Arial, Helvetica, sans-serif;text-decoration:none;"></div>
+
+<br><br>
+{% endif%}
+<style>
+    .row{
+        
+        display: flex;
+    }
+    .col{
+        font:20px;
+    }
+</style>
+
+
+{%if news%}
+<h3>News feed</h3>
+<br>
+<br>
+
+{% for item in news %}
+    <div class='row'>
+        <div class="col" style="flex: 20%;align-content: center;">
+            {%if item.image %}
+            <img src="{{item.image}}" style="width: 150px;height:150px;"alt="Image not found" onerror="this.onerror=null;this.src='quotes/assets/not_found.jpg'"/>
+        
+            {%endif%}
+        </div>
+        <div class="col"  style="flex: 80%;">
+            <a href="https://cloud.iexapis.com/v1/news/article/025489df-d099-48c4-a2d1-7fe91ebddbf0"><h5>{{item.headline}}</h5></a>
+    <h6>source:{{item.source}}</h6>
+    <h6>{{item.summary|truncatechars:500}}</h6>
+        </div>
+    </div>
+    <hr>
+    <br>
+
+    
+{% endfor%}
+{%endif%}
+{% endblock%} 
+
