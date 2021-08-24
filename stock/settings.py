@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ch4vot%y-7(a1cu2-i=swcvakct*u=8gh$@d*$ld#i$h)^d#(g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['gentle-anchorage-50501.herokuapp.com']
 
 
 # Application definition
