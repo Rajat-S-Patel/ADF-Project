@@ -7,14 +7,14 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.contrib import messages
-import logging
+
 
 from .form import StockForm,CustomUserCreationForm
 import csv
 # Create your views here.
 
 CURR_API='pk_8dcca86a75684f78ae32a82d50fe9f98'
-logger = logging.getLogger(__name__)
+
 
 # def login(request):
 #     return render(request,'registration/login.html')
