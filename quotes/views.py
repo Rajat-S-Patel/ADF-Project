@@ -1,3 +1,4 @@
+import stock
 from django.db.models import fields
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse, JsonResponse
@@ -6,11 +7,14 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.contrib import messages
+import logging
+
 from .form import StockForm,CustomUserCreationForm
-import pandas as pd
+import csv
 # Create your views here.
 
-CURR_API='pk_fac4ed3466ac44c994f3d8ee26bf41a2'
+CURR_API='pk_8dcca86a75684f78ae32a82d50fe9f98'
+logger = logging.getLogger(__name__)
 
 # def login(request):
 #     return render(request,'registration/login.html')
@@ -26,7 +30,10 @@ def autocomplete(request):
         # print('sds')
     global stock_list
     if(stock_list==[]):
-        stock_list=list(pd.read_csv('quotes/assets/stocks.csv').values[:,1])
+        with open('quotes/assets/stocks.csv','r') as f:
+            reader = csv.reader(f)
+            for i in reader:
+                stock_list.append(i[1])
     return JsonResponse(stock_list,safe=False)
     # return redirect('home')
 
@@ -36,7 +43,11 @@ def home(request,ticker=None):
     import json
     global stock_list
     if(stock_list==[]):
-        stock_list=list(pd.read_csv('quotes/assets/stocks.csv').values[:,1])
+        with open('quotes/assets/stocks.csv','r') as f:
+           
+            reader = csv.reader(f)
+            for i in reader:
+                stock_list.append(i[1])
 
     if(ticker!=None):
         api_request=requests.get("https://cloud.iexapis.com/stable/stock/"+ticker+"/batch?types=quote,news&range=1m&last=100&token="+CURR_API)
