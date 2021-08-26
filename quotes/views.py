@@ -13,7 +13,7 @@ from .form import StockForm,CustomUserCreationForm
 import csv
 # Create your views here.
 
-CURR_API='pk_8dcca86a75684f78ae32a82d50fe9f98'
+CURR_API='pk_ec9f57c356c64f71a9a9301b105417a3'
 
 
 # def login(request):
@@ -50,10 +50,10 @@ def home(request,ticker=None):
                 stock_list.append(i[1])
 
     if(ticker!=None):
-        api_request=requests.get("https://cloud.iexapis.com/stable/stock/"+ticker+"/batch?types=quote,news&range=1m&last=100&token="+CURR_API)
+        api_request=requests.get("https://cloud.iexapis.com/stable/stock/"+ticker+"/batch?types=quote&range=1m&last=100&token="+CURR_API)
         try:
             api=json.loads(api_request.content)
-            return render(request,'../templates/home.html',{"api":api['quote'],"ticker":ticker,"nav":"home","news":api['news']})
+            return render(request,'../templates/home.html',{"api":api['quote'],"ticker":ticker,"nav":"home","news":None})
 
             
         except Exception as e:
@@ -73,10 +73,10 @@ def home(request,ticker=None):
       
         #api_request=requests.get("https://cloud.iexapis.com/stable/stock/"+ticker+"/quote?token=pk_fac4ed3466ac44c994f3d8ee26bf41a2")
 
-        api_request=requests.get("https://cloud.iexapis.com/stable/stock/"+ticker+"/batch?types=quote,news&range=1m&last=100&token="+CURR_API)
+        api_request=requests.get("https://cloud.iexapis.com/stable/stock/"+ticker+"/batch?types=quote&range=1m&last=100&token="+CURR_API)
         try:
             api=json.loads(api_request.content)
-            return render(request,'../templates/home.html',{"api":api['quote'],"ticker":ticker,"nav":"home","news":api['news']})
+            return render(request,'../templates/home.html',{"api":api['quote'],"ticker":ticker,"nav":"home","news":None})
 
             
         except Exception as e:
@@ -93,7 +93,9 @@ def home(request,ticker=None):
 
 
 
-        api_request=requests.get("https://cloud.iexapis.com/stable/stock/ndaq/batch?types=quote,news&range=1m&last=100&token="+CURR_API)
+        #api_request=requests.get("https://cloud.iexapis.com/stable/stock/ndaq/batch?types=quote,news&range=1m&last=100&token="+CURR_API)
+        api_request=requests.get("https://cloud.iexapis.com/stable/stock/ndaq/batch?types=quote&range=1m&last=100&token="+CURR_API)
+        
         try:
             api=json.loads(api_request.content)
         
@@ -102,7 +104,7 @@ def home(request,ticker=None):
             print(e)
             api="Error..."
         
-        return render(request,'../templates/home.html',{"api":api['quote'],"ticker":ticker,"nav":"home","news":api['news']})
+        return render(request,'../templates/home.html',{"api":api['quote'],"ticker":ticker,"nav":"home","news":None})
 
     
     

@@ -184,7 +184,7 @@
                 if(cache==null){
                     $.getJSON("{% url 'autocomplete' %}",function(data){
                         cache=data;
-                        console.log(data);
+                        //console.log(data);
                     });
                     var results = $.ui.autocomplete.filter(cache, request.term);
                     response(results.slice(0, 10));
