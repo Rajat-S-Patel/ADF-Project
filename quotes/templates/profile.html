@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .col{
+        margin:5px;
+    }
+    #profile_img{
+        width:120px;
+        height:120px;
+        border-radius:50%;
+        background-image: url(http://lorempixel.com/g/400/200/);
+        background-position: center;
+        background-size:100% auto;
+        background-repeat: no-repeat;
+    }
+</style>
+    <div class="container">
+        <div class="card shadow" style="padding: 1rem;">
+            {% csrf_token %}
+            <div class="text-center">
+                <img id="profile_img" src="/media/{{user.image}}" alt="profile-image">
+            </div>
+            <h2 class="text-center">Welcome {{user.first_name}}</h2>
+           
+            <table class="grid table table-striped">
+                <tbody>
+                    
+                    <tr>
+                        <td class="col">Username</td>
+                        <td class="col-6">{{user.username}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col">Email</td>
+                        <td class="col-6">{{user.email}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col">First Name</td>
+                        <td class="col-6">{{user.first_name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col">Last Name</td>
+                        <td class="col-6">{{user.last_name}}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="col">Date of Join</td>
+                        <td class="col-6">{{user.start_date}}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <div class="container">
+                <div class="row">
+                    <div class="col btn btn-primary" onclick="redirectToEdit()">Edit Profile</div>    
+                    <div class="col btn btn-secondary" onclick="redirectToPasswordChange()">Reset Password</div>    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+<script>
+    function redirectToEdit(){
+        let url="{% url 'user-update' pk=request.user.id %}"
+        window.location=url;
+    }
+    function redirectToPasswordChange(){
+        let url="{% url 'password-change' %}";
+        window.location=url;
+    }
+</script>
+{% endblock %}

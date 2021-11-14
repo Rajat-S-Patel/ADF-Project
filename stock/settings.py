@@ -11,10 +11,15 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-
+from .info import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+EMAIL_USE_TLS = EMAIL_USE_TLS
+EMAIL_HOST = EMAIL_HOST
+EMAIL_HOST_USER = EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
+EMAIL_PORT = EMAIL_PORT
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -25,7 +30,7 @@ SECRET_KEY = 'django-insecure-ch4vot%y-7(a1cu2-i=swcvakct*u=8gh$@d*$ld#i$h)^d#(g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','gentle-anchorage-50501.herokuapp.com']
+ALLOWED_HOSTS = ['localhost','gentle-anchorage-50501.herokuapp.com','127.0.0.1']
 
 
 # Application definition
@@ -37,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'quotes'
+    'quotes',
+    'Auth'
 ]
 
 MIDDLEWARE = [
@@ -121,11 +127,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 import os
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'quotes/assets')
 STATIC_URL = '/assets/'
-
+STATICFILES_DIRS = [
+   os.path.join(BASE_DIR, 'quotes/staticAssets')
+   
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+AUTH_USER_MODEL = 'Auth.CustomUser'

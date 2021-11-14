@@ -1,12 +1,45 @@
+arviz @ file:///home/conda/feedstock_root/build_artifacts/arviz_1633274821480/work
 asgiref==3.4.1
-certifi==2021.5.30
+certifi==2021.10.8
+cftime @ file:///D:/bld/cftime_1632539926159/work
 charset-normalizer==2.0.4
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1602866480661/work
+convertdate @ file:///home/conda/feedstock_root/build_artifacts/convertdate_1615678826465/work
+cycler==0.10.0
+Cython @ file:///D:/bld/cython_1626221662193/work
 Django==3.2.6
+ephem @ file:///C:/ci/ephem_1600337431654/work
+fbprophet @ file:///D:/bld/fbprophet_1599365958928/work
+hijri-converter @ file:///home/conda/feedstock_root/build_artifacts/hijri-converter_1632549476122/work
+holidays @ file:///home/conda/feedstock_root/build_artifacts/holidays_1632959329709/work
 idna==3.2
-python-dateutil==2.8.2
-pytz==2021.1
+kiwisolver @ file:///D:/bld/kiwisolver_1630173896207/work
+korean-lunar-calendar @ file:///home/conda/feedstock_root/build_artifacts/korean_lunar_calendar_1589354365811/work
+LunarCalendar==0.0.9
+lxml==4.6.3
+matplotlib @ file:///D:/bld/matplotlib-suite_1632417749342/work
+multitasking==0.0.9
+netCDF4 @ file:///D:/bld/netcdf4_1633096551211/work
+numpy @ file:///D:/bld/numpy_1634853135042/work
+olefile @ file:///home/conda/feedstock_root/build_artifacts/olefile_1602866521163/work
+packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1625323647219/work
+pandas @ file:///D:/bld/pandas_1634504373413/work
+Pillow @ file:///D:/bld/pillow_1630696805646/work
+plotly==5.3.1
+PyMeeus @ file:///home/conda/feedstock_root/build_artifacts/pymeeus_1615809745702/work
+pyparsing @ file:///home/conda/feedstock_root/build_artifacts/pyparsing_1635368442055/work
+pystan==2.19.1.1
+python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/python-dateutil_1626286286081/work
+pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1633452062248/work
 requests==2.26.0
-six==1.16.0
+scipy @ file:///C:/bld/scipy_1628206591178/work
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
 sqlparse==0.4.1
+tenacity==8.0.1
+tornado @ file:///D:/bld/tornado_1610094858390/work
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1632160078689/work
+typing-extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1632313171031/work
 urllib3==1.26.6
-gunicorn
+wincertstore==0.2
+xarray @ file:///home/conda/feedstock_root/build_artifacts/xarray_1627311788418/work
+yfinance==0.1.64

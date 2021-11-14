@@ -50,7 +50,7 @@
 
 </style>
 
-<form  action="{% url 'add_stock' user %}" class="d-flex" method="POST">
+<form  style="margin-top: 100px;" action="{% url 'add-stock' %}" class="d-flex" method="POST">
     {% csrf_token %}
     <input  id='watchlist_form' class="form- control me-2" type="search" placeholder="Add to stock" aria-label="Search" name='ticker'>
     <input type="hidden" name="user" value="{{user}}" />
@@ -64,6 +64,7 @@
   
    
  <style>
+   
             .dataTables_length,
         .dataTables_wrapper {
           font-size: 1rem;
@@ -146,7 +147,7 @@
         <td>{{item.marketCap}}</td>
         <td>{{item.week52High}}</td>
         <td>{{item.week52Low}}</td>
-        <td><a style='text-decoration: none;'href="{% url 'delete' x.id user %}">
+        <td><a style='text-decoration: none;'href="{% url 'delete' x.ticker %}">
           <button type='button' class="btn btn-danger btn-sm">Delete</button>
         </td>
       </tr>

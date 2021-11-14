@@ -1,0 +1,271 @@
+<style>
+    .dark {
+        color: rgb(185, 183, 183);
+        
+    }
+    .lighten{
+        color: rgb(233, 229, 229);
+    }
+
+    .banner{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-bottom: 2rem;
+    }
+
+    
+    .banner .row .price{
+        font-size: 2rem;
+        font-weight: 500;
+      
+        
+      
+    }
+
+     .positive{
+        color:rgb(4, 241, 111);
+      
+        }
+
+     .negative{
+        color:rgb(255, 59, 59);
+    }
+    .banner .row .currency{
+        font-size: 1.2rem;
+        letter-spacing: 1.5;
+        color:rgb(185, 183, 183);
+        font-weight: 500;
+    
+    }
+
+
+    .info {
+        display: flex;
+        
+        flex-direction: column;
+       
+    }
+    .header,.footer {
+        display: flex;
+        
+    }
+    .info .banner{
+        display: flex;
+        flex-direction: row;
+        
+        justify-content: space-between;
+    }
+    .info .section{
+        display: flex;
+        justify-content: space-between;
+        flex-basis: content;
+        
+    }
+    
+    .row {
+        display: flex;
+        padding: 5px 10px;
+        flex-direction: column;
+        
+
+    }
+
+    .stock-card {
+        width: 70%;
+        margin: auto;
+        margin-top: 100px;
+        padding: 20px 32px;
+        background-color: #212529;
+        border:1px solid rgba(0,0,0,.125);
+        border-radius:0.25rem;
+        box-sizing: border-box;
+        position: relative;
+        animation: card-load 1000ms ease-in 
+
+       
+    }
+
+    @keyframes card-load {
+        from{
+            opacity: 0.5;
+          
+        }
+        to
+        {
+            opacity: 1;
+           
+        }
+
+    }
+    span{
+        display: inline-block;
+    }
+    td:nth-of-type(2){
+        padding-left: 30px;
+    }
+    .link-btn{
+        padding: 4px 32px;
+        text-decoration: none;
+        color:#212529;
+        border: 1px solid black;
+        border-radius: 20px;
+        text-align: center;
+        font-weight: 600;
+        margin-top: 1rem;
+        background-color: rgb(4, 241, 111);
+        transition: background-color 200ms;
+    }
+
+    .pin{
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+  
+    
+    .link-btn:hover{
+        text-decoration: none;
+        color: #212529;
+        background-color:#6793c0;
+    }
+    
+
+</style>
+{% load filter %}
+{% if api %}
+{% if api == "Error..." %}
+There was a problem with your ticker symbol
+{% else %}
+
+<div class="stock-card " style="color:white;">
+    <div>
+            <div class="header">      
+                   <span class="dark" style="font-size: 1.2rem;font-weight: 500;letter-spacing: 1px;">
+                        Market Summary >
+                    </span>
+                    <span  style="font-size: 1.2rem;font-weight: 500;letter-spacing: 1px;">
+                        {{api.companyName}}
+                    </span>
+                </div>
+               
+                <hr>
+            <div class="info">
+              
+            <div class="banner">
+                <div class="row">
+              
+                        <span class="price">
+                            {{api.latestPrice}}
+                            <span class="currency">
+                                {{api.currency}}
+                            </span>
+                        </span>
+                  
+                    
+                    {% load static %}
+            
+                        {% if api.change > 0 %}
+                        <span class="positive" >
+                            + {{api.change }}  ({{api.changePercent | percentage }})
+                            <img style="object-fit: contain; width: 12px;" src="https://img.icons8.com/ios-glyphs/50/26e07f/up--v1.png"/>
+                             today
+                        </span>
+                        {% else %}
+                        <span class="negative" >
+                             {{api.change}} ({{api.changePercent | percentage }})
+                            <img style="object-fit: contain; width: 12px;" src="https://img.icons8.com/ios-filled/50/fa314a/down--v1.png"/>
+                             today
+                        </span>
+                        
+                        {% endif %}
+                   
+                   
+                </div>
+                <div class="row">
+                    <span class="dark">
+                        {{api.primaryExchange | acronym }}:
+                        <span class="lighten">
+                            {{api.symbol}}
+                        </span>
+                    </span>
+                    <a href="#" class="link-btn">
+                        <span style="font-size:1.2rem;padding: 0px;"><b>+</b></span>
+                        Follow
+                    </a>
+                </div>
+            </div>
+        
+                <div class="section">
+                        
+                    <div class="row">
+                        <table style="padding: 0px;">
+                            <tr>
+                                <td> <span class="lighten">Open</span></td>
+                                <td><span class="dark">{{api.iexOpen}}</span></td>
+                            </tr>
+                            <tr>
+                                <td> <span class="lighten">MktCap</span></td>
+                                <td><span class="dark">{{api.marketCap | readable }}</span></td>
+                            </tr>
+                            <tr>
+                                <td> <span class="lighten">P/E ratio</span></td>
+                                <td> <span class="dark">{{api.peRatio}}</span></td>
+                            </tr>  
+                        </table>
+                    </div>
+                    <div class="row">
+                        <table>
+                            <tr>
+                                <td> <span class="lighten">Previous close</span></td>
+                                <td> <span class="dark">{{api.previousClose}}</span></td>
+                            </tr>
+                            <tr>
+                                <td> <span class="lighten">Avg total volume</span></td>
+                                <td> <span class="dark">{{api.avgTotalVolume | readable }}</span></td>
+                            </tr>
+                            <tr>
+                                <td> <span class="lighten">Previous volume</span></td>
+                                <td> <span class="dark">{{api.previousVolume | readable }}</span></td>
+                            </tr>  
+                        </table>
+                    </div>
+                    <div class="row">
+                        <table>
+                            <tr>
+                                <td> <span class="lighten">52-wk high</span></td>
+                                <td> <span class="dark">{{api.week52High}}</span></td>
+                            </tr>
+                            <tr>
+                                <td> <span class="lighten">52-wk low</span></td>
+                                <td> <span class="dark">{{api.week52Low}}</span></td>
+                            </tr>
+                            <tr>
+                                <td> <span class="lighten">Ytd change</span></td>
+                                <td> <span class="dark">{{api.ytdChange | percentage}}</span></td>
+                            </tr>  
+                        </table>
+                    </div>
+                  
+                </div>
+            </div>
+            <br> 
+            <div class="pin">
+                <a href="{% url 'fullStockDetail' ticker %}" class="link-btn">More about
+                    {{api.companyName}}</a>
+            </div>
+           
+            
+              
+            
+    </div>
+</div>
+<br>
+<br>
+<br>
+{% endif %}
+
+{%else%}
+There was a problem with your ticker symbol
+{% endif %}

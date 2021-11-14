@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<title>Personal Information</title>
+<div class="container">
+<div class="card shadow" style="margin: 10px; padding: 10px;">
+  
+<h4 class="mb-4">Welcome, {{user.username}}!  We would like to know more about you 😃</h4>
+{% include 'messages.html' with messages=messages %}
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>
+</div>
+</div>
+{% endblock %}

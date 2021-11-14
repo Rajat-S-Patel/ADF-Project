@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-
+ 
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -19,16 +19,111 @@
     
   
   <style>
+
+    /* checkbox */
+      .checkbox {
+          opacity: 0;
+          position: absolute;
+        }
+
+    .label {
+      width: 50px;
+      height: 26px;
+      background-color:#111;
+      display: flex;
+      border-radius:50px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px;
+      position: relative;
+      transform: scale(1.5);
+    }
+
+    .ball {
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      border-radius: 50%;
+      transition: transform 0.2s linear;
+}
+
+    /*  target the elemenent after the label*/
+    .checkbox:checked + .label .ball{
+      transform: translateX(24px);
+    }
+
+    .fa-moon {
+      color: rgb(4, 241, 111);
+    }
+
+    .fa-sun {
+      color: yellow;
+    }
+/* checkbox completed */
+
+
     .bottom_border{
         border-bottom:2px solid white;
+        
+    } 
+
+    body{
+      background-color: white;
+    }
+
+    body.dark{
+      background-color: #111;
+    }
+    .app-name{
+      letter-spacing: 1.6px;
+      font-weight: 500;
 
     }
-  .ui-autocomplete { height: 200px; overflow-y: scroll; overflow-x: hidden;}
+    .fixed{
+        display: flex;
+        width: 100%;
+        z-index: 1;
+       
+        position: fixed;
+    }
 
+    .nav-menu{
+      padding:10px;
+      margin:0px 10px;
+    }
+    .logo-img{
+      height:42px;
+      object-fit: contain;
+      padding: 0px;
+      transform: scale(1.3);
+      
+    }
+    .nav-link{
+      letter-spacing: 1.23px;
+    }
+  .ui-autocomplete  { height: 200px; overflow-y: scroll; overflow-x: hidden;
+      
+  }
+ 
+
+
+.ui-menu-item .ui-state-active {
+    color: black;
+    text-decoration: none;
+    background-color: #4bb47c;
+
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    background-image: none;
+}
   </style>
 
 <script>
-
+  /*Script for autocompletion of the text*/
   var cache=null;
   $(
       function(){
@@ -40,7 +135,7 @@
               if(cache==null){
                   $.getJSON("{% url 'autocomplete' %}",function(data){
                       cache=data;
-                      console.log(data);
+                      //console.log(data);
                   });
                   var results = $.ui.autocomplete.filter(cache, request.term);
                   response(results.slice(0, 10));
@@ -58,33 +153,40 @@
       }
   );
   
+  
 </script>
 
-  <title>Stock portfolio</title>
+  <title>Stock Tracker</title>
 
 </head>
 
 <link href="/your-path-to-fontawesome/css/fontawesome.css" rel="stylesheet">
   <link href="/your-path-to-fontawesome/css/brands.css" rel="stylesheet">
   <link href="/your-path-to-fontawesome/css/solid.css" rel="stylesheet">
-
-  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">  
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+ {% load static %}
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">StockTrkr</a>
+      <a class="navbar-brand" href="#">
+        <div>
+          <span class="app-name">StockTracker</span>
+          <img src="{% static 'logo.png' %}" alt="logo" class='logo-img'/>
+        </div>
+      </a>
       <button class="navbar-toggler" type="button" daxpanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon">
+        </span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             {% if nav == "home" %}
-            <a class="nav-link active bottom_border" 
+            <a class="nav-link active bottom_border nav-menu" 
              href="{% url 'home' %}">Home</a>
             {% else %}
-            <a class="nav-link"  href="{% url 'home' %}">Home</a>
+            <a class="nav-link nav-menu"  href="{% url 'home' %}">Home</a>
             {% endif%}
 
            
@@ -96,17 +198,17 @@
 
           <li class="nav-item">
             {% if nav == "add_stock" %}
-            <a class="nav-link active bottom_border" style="padding-bottom: 0px;" href="{% url 'get_stock' user %}">Add stock</a>
+            <a class="nav-link active bottom_border nav-menu"  href="{% url 'get-stock' %}">Watchlist</a>
             {% else %}
-            <a class="nav-link" href="{% url 'get_stock' user %}">Add stock</a>
+            <a class="nav-link nav-menu" href="{% url 'get-stock'  %}">Watchlist</a>
             {% endif%}
             
           </li>
             <li class="nav-item">
               {% if nav == "about" %}
-              <a class="nav-link active bottom_border" href="{% url 'about' %}">About</a>
+              <a class="nav-link active bottom_border nav-menu" href="{% url 'about' %}">About</a>
           {% else %}
-          <a class="nav-link" href="{% url 'about' %}">About</a>
+          <a class="nav-link nav-menu" href="{% url 'about' %}">About</a>
           {% endif%}
            
           </li>
@@ -114,17 +216,25 @@
          
           <li class="nav-item">
             {% if user.is_authenticated %}
-            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            <a class="nav-link nav-menu" href="{% url 'logout' %}">Logout</a>
         {% else %}
-            <a class="nav-link" href="{% url 'login' %}">Login</a>
+            <a class="nav-link nav-menu" href="{% url 'signin' %}">Login</a>
         {% endif %}
           </li>
         
           
         <li class="nav-item ">
-            
-          <a class="nav-link" href="#">{{user.username|default:'Guest'}}</a>
+          <a class="nav-link nav-menu" href="{% url 'profile' %}">{{user.username|default:'Guest'}}</a>
         </li>
+        
+        <div style="text-align: center;padding: 10px;margin-left: 100px;height: 30px;" >
+          <input type="checkbox" class="checkbox" id="checkbox">
+          <label for="checkbox" class="label">
+            <i class="fas fa-moon"></i>
+            <i class='fas fa-sun'></i>
+            <div class='ball'>
+          </label>
+        </div>
 
         </ul>
         <form action="{% url 'home' %}" class="d-flex" method="POST">
@@ -147,29 +257,34 @@
 
  
 
-  <div class="container">
+  <div class="container" >
     
 
     <br>
-    {% if messages %}
+    <div style="margin-top: 60px;">
+    {% include 'messages.html' with messages=messages %}
+    </div>
+    <!-- {% if messages %}
     {% for message in messages%}
 
-    <div class="container">
-      <div class="alert alert-warning alert-dismissible" role="alert">
+    <div class="container" style="margin-top:60px;" id="success-alert">
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{message}}
-        <button type="button" class="close" data-dismiss="alert">
-        X
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" id="btn-close-success">
+          X
         </button>
       </div>
     </div>
     <br>
+    
     {% endfor %}
-    {% endif%}
+    {% endif%} -->
+  </div>
+  <div class="container" style="margin-top:50px">
     {% block content %}
 
     {% endblock %}
-  </div>
-
+    </div>
 
   <script>
 
@@ -201,6 +316,11 @@
             });
         }
     );
+    const checkbox = document.getElementById('checkbox');
+
+    checkbox.addEventListener('change', ()=>{
+      document.body.classList.toggle('dark');
+    })
     
   </script>
   

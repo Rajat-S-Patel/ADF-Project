@@ -2,103 +2,80 @@
 
 {% block content %}
 
+<style>
+  .section-break {
+    display: flex;
+    justify-content: center;
+    color: white;
+    /* rgb(24, 6, 54); */
+    font-size: 1.5em;
+    font-weight: 700;
+  }
 
-{% if api %}
-    {% if api == "Error..." %}
-        There was a problem with your ticker symbol
-    {% else %}
+  .card-text-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: 1.2;
+  }
 
-    <div class="card bg-dark mb-3" style="color:white;width: 18rem;">
-        <div class="card-body">
-          <h3 class="card-title">{{api.companyName}}</h3>
-          <p class="card-text">
-              <table>
-                  <tr>
-                    <td><b>Price</b>:</td>
-                    <td>{{api.latestPrice}}</td>
-                 </tr>
-                 <tr>
-                    <td><b>marketCap</b>:</td>
-                    <td>{{api.marketCap}}</td>
-                 </tr>
-                 <tr>
-                    <td><b>week52High</b>:</td>
-                    <td>{{api.week52High}}</td>
-                 </tr>
-                 <tr>
-                    <td><b>week52Low</b>:</td>
-                    <td>{{api.week52Low}}</td>
-                 </tr>
-              </table>
-          </p>
-          <a href="{% url 'fullStockDetail' ticker %}" class="btn btn-primary btn-g">Show all</a>
-        </div>
-    </div>
-    {% endif %}
+  #stock-chart {
+    background-color: #212529;
+  }
+</style>
 
-{%else%}
-    There was a problem with your ticker symbol
-{% endif %}
+
+{% include 'stock-card.html' %}
+
 
 {% if ticker != "Error..." %}
 {{ ticker|json_script:'name' }}
+{% endif%}
+<div class="section-break">
+  <span>
+    Stock History of {{api.companyName}}
+  </span>
+
+</div>
+<br>
+<br>
+<div id="stock-chart" style="width: 85%;margin:auto ;"></div>
+</br>
+</br>
+<div class="section-break">
+  <span>
+    Stock Trend Prediction (till 2025)
+  </span>
+
+</div>
+<br>
+<br>
+<div id="forecast" style="margin-left:100px;padding: 0px"></div>
+
+
+<h1 style="color: #1f2022a4;"></h1>
+{% load static %}
+
 
 <!-- <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script> -->
-<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
+<!-- <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script> -->
+<script src='https://cdn.plot.ly/plotly-2.4.2.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'></script>
 <script>
 
-    
-window.onload = function () {
-  var dataPoints = [];
-  var stockChart = new CanvasJS.StockChart("stockChartContainer",{
-    theme: "light2",
-    colorSet: "colorSet1",
-    exportEnabled: true, //false
-    title:{
-      text:"Stock History"
-    },
-    subtitles: [{
-      text: "Closing price of stocks"
-    }],
-    charts: [{
-      axisX: {
-        crosshair: {
-          enabled: true
-        }
-      },
-      axisY: {
-        prefix: "$",
-        suffix: "",
-        title: "Previous close",
-        titleFontSize: 14
-      },
-      data: [{
-        type: "area",
-        xValueFormatString: "MMM YYYY",
-        yValueFormatString: "$#,###.##M",
-        dataPoints : dataPoints
-      }]
-    }],
-    navigator: {
-      slider: {
-        minimum: new Date(2021, 00, 01),
-        maximum: new Date(2021, 00, 04)
-      }
-    }
-  });
+  window.onload = function () {
+    var ticker = JSON.parse(document.getElementById('name').textContent);
+    chart = JSON.parse("{{chart | escapejs}}");
+    forecast = JSON.parse("{{forecast | escapejs}}");
+    chart.layout.paper_bgcolor = '#161a1d'
+    chart.layout.plot_bgcolor = '#161a1d'
+    forecast.layout.paper_bgcolor = '#161a1d'
+    forecast.layout.plot_bgcolor = '#161a1d'
+    Plotly.newPlot('forecast', forecast['data'], forecast['layout']);
 
-  var ticker= JSON.parse(document.getElementById('name').textContent);
-  console.log(ticker);
+    Plotly.newPlot('stock-chart', chart['data'], chart['layout']);
 
-  $.getJSON("https://cloud.iexapis.com/stable/stock/"+ticker+"/batch?types=chart&range=1m&last=100&token=pk_c34e4387edb548f793eb253819c594f0", function(data) {
-    data=data['chart']
-    
-    for(var i = 0; i < data.length; i++){
-      dataPoints.push({x: new Date(data[i].date), y: Number(data[i].open)});
-    }
-    stockChart.render();
-  });
-}
+
+  }
 
 </script>
 
@@ -106,18 +83,21 @@ window.onload = function () {
 </br>
 
 <div id="stockChartContainer" style="color:green; height:400px; width: 100%;"></div>
-<div style="margin-top:16px;color:dimgrey;font-size:9px;font-family: Verdana, Arial, Helvetica, sans-serif;text-decoration:none;"></div>
+<div
+  style="margin-top:16px;color:dimgrey;font-size:9px;font-family: Verdana, Arial, Helvetica, sans-serif;text-decoration:none;">
+</div>
 
 <br><br>
-{% endif%}
+
 <style>
-    .row{
-        
-        display: flex;
-    }
-    .col{
-        font:20px;
-    }
+  .row {
+
+    display: flex;
+  }
+
+  .col {
+    font: 20px;
+  }
 </style>
 
 
@@ -127,24 +107,26 @@ window.onload = function () {
 <br>
 
 {% for item in news %}
-    <div class='row'>
-        <div class="col" style="flex: 20%;align-content: center;">
-            {%if item.image %}
-            <img src="{{item.image}}" style="width: 150px;height:150px;"alt="Image not found" onerror="this.onerror=null;this.src='quotes/assets/not_found.jpg'"/>
-        
-            {%endif%}
-        </div>
-        <div class="col"  style="flex: 80%;">
-            <a href="https://cloud.iexapis.com/v1/news/article/025489df-d099-48c4-a2d1-7fe91ebddbf0"><h5>{{item.headline}}</h5></a>
+<div class='row'>
+  <div class="col" style="flex: 20%;align-content: center;">
+    {%if item.image %}
+    <img src="{{item.image}}" style="width: 150px;height:150px;" alt="Image not found"
+      onerror="this.onerror=null;this.src='quotes/assets/not_found.jpg'" />
+
+    {%endif%}
+  </div>
+  <div class="col" style="flex: 80%;">
+    <a href="https://cloud.iexapis.com/v1/news/article/025489df-d099-48c4-a2d1-7fe91ebddbf0">
+      <h5>{{item.headline}}</h5>
+    </a>
     <h6>source:{{item.source}}</h6>
     <h6>{{item.summary|truncatechars:500}}</h6>
-        </div>
-    </div>
-    <hr>
-    <br>
+  </div>
+</div>
+<hr>
+<br>
 
-    
+
 {% endfor%}
 {%endif%}
-{% endblock%} 
-
+{% endblock%}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<title>Sign In</title>
+<div class="container">
+<div class="card shadow" style="margin: 10px; padding: 10px;">
+
+  <h3>Signin Form</h3>
+  {% include 'messages.html' with messages=messages %}
+  <form method="POST">
+    {% csrf_token %}
+    
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input class="form-control" id="username" type="text" name="username" placeholder="Enter your username" required />
+    </div>
+    
+    <div class="form-group">
+      <label for="password1">Password</label>
+      <input class="form-control" id="password" type="password" name="password" placeholder="Enter your password" required />
+    </div>
+    
+    <div class="form-group">
+      <button type="submit" class="btn btn-success">Signup</button>
+    </div>
+  
+  </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,10 +1,9 @@
 from django.db import models
-from django.db.models.fields import DateField, DateTimeField
+from Auth.models import CustomUser
 
 class Stock(models.Model):
-    ticker=models.CharField(max_length=10)
-    user=models.CharField(max_length=20,default="guest")
-   
+    ticker=models.CharField(max_length=10,primary_key=True)
+    user=models.ManyToManyField(CustomUser)
     created_on=models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
