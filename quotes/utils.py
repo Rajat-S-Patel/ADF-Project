@@ -95,12 +95,6 @@ def onload(ticker):
         data=load_data(ticker)
         forecast=forcast(data)
         chart=plot_raw_data(data)
-        # data['Date']=data['Date'].astype(str)
-        # response={"date":data['Date'].values.tolist(),
-        #                 "close":data['Close'].values.tolist(),
-        #                 "start":START,
-        #                 "today":TODAY}
-        # response=json.dumps(response)
         
         
         CACHE[ticker]={"chart":chart,"forecast":forecast}

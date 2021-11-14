@@ -66,7 +66,7 @@ class UserRegisterView(CreateView):
 
         messages.success(req,"Your account is successfully created!!! Please check your email to confirm your email address in order to activate your account.")
 
-        subject="Confirm Email for NewGen Social Media"
+        subject="Confirm Email for Stock Tracker App"
         current_site=get_current_site(req)
         msg = render_to_string('email_confirm.html',{
             'name':user.username,

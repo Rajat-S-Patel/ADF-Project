@@ -21,10 +21,6 @@ API_CACHE={}
 CURR_API='pk_fac4ed3466ac44c994f3d8ee26bf41a2'
 
 
-
-# def login(request):
-#     return render(request,'registration/login.html')
-
 stock_list=[]
     
 def main(request):
@@ -33,8 +29,6 @@ def main(request):
 
 def autocomplete(request):
     
-    # if('term' in request.GET):
-        # print('sds')
     global stock_list
     if(stock_list==[]):
         with open('quotes/assets/stocks.csv','r') as f:
@@ -114,11 +108,9 @@ def home(request,ticker=None):
         
     else:
        
-        #api_request=requests.get("https://cloud.iexapis.com/stable/stock/"+ticker+"/quote?token=pk_fac4ed3466ac44c994f3d8ee26bf41a2")
         ticker="ndaq"
         
         if(ticker not in API_CACHE.keys()):
-            #api_request=requests.get("https://cloud.iexapis.com/stable/stock/ndaq/batch?types=quote,news&range=1m&last=100&token="+CURR_API)
             api_request=requests.get("https://cloud.iexapis.com/stable/stock/ndaq/batch?types=quote&range=1m&last=100&token="+CURR_API)
             API_CACHE[ticker]=api_request
         else:
@@ -187,14 +179,6 @@ def add_stock(request):
         
         stock.user.add(request.user)
         return redirect('get-stock')
-    # else:
-    #     ticker=Stock.objects.all()
-    #     output=[]
-    #     for ticker_item in  ticker:
-    #         api_request=requests.get("https://cloud.iexapis.com/stable/stock/"+str(ticker_item)+"/quote?token=pk_fac4ed3466ac44c994f3d8ee26bf41a2")
-    #         temp=json.loads(api_request.content)
-    #         output.append((temp,ticker_item))
-    #     return render(request,'add_stock.html',{"output":output})
 
 def fullStockDetail(request,ticker):
     import requests
